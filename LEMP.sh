@@ -29,7 +29,7 @@ sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 #Reiniciamos
 systemctl restart php7.4-fpm
 
-#Configuramos NGNIX para usar php.fpm
+#Configuramos NGINX para usar php.fpm
 cd /home/ubuntu
 git clone https://github.com/knyu07/iaw-practica-06
 cp /home/ubuntu/iaw-practica-06/default /etc/nginx/sites-available/default
@@ -84,13 +84,14 @@ HTTPPASSWD_USER=pilar
 HTTPASSWD_PASSWD=root
 HTTPPASSWD_DIR=/home/ubuntu
 
-mkdir -p /var/www/html/stats
-nohup goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --log-format=COMBINED --real-time-html &
-htpasswd -bc $HTTPPASSWD_DIR/.htpasswd $HTTPPASSWD_USER $HTTPASSWD_PASSWD
+mkdir -p /etc/nginx/.htpasswd
+nohup goaccess /var/log/nginx/access.log -o --log-format=COMBINED --real-time-html &
+htpasswd -c /etc/nginx/.htpasswd/admin admin
+#htpasswd -bc $HTTPPASSWD_DIR/.htpasswd $HTTPPASSWD_USER $HTTPASSWD_PASSWD
 
 # Copiamos el archivo de configuración de Nginx
 git clone https://github.com/knyu07/iaw-practica-06
-cp /home/ubuntu/iaw-practica-03/000-default.conf /etc/nginx/sites-available/
+cp /home/ubuntu/iaw-practica-06/000-default.conf /etc/nginx/sites-available/
 systemctl restart nginx
 
 # --------------------------------------------------------------------------------
