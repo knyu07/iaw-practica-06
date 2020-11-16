@@ -8,7 +8,7 @@ apt update
 apt upgrade -y 
 
 #Instalación NGINX
-apt-get install nginx -y
+sudo apt-get install nginx -y
 
 # Instalamos el MySQL Server
 apt install mysql-server -y
@@ -24,7 +24,6 @@ mysql -u root <<< "FLUSH PRIVILEGES;"
 apt-get install php-fpm php-mysql -y
 
 #Configuración de php-fpm
-nano /etc/php/7.4/fpm/php.ini
 sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 
 #Reiniciamos
@@ -41,19 +40,36 @@ systemctl restart nginx
 #    HERRAMIENTAS ADMINISTRATIVAS
 ########################################
 
+#-------------- Herramientas Administrativas -----------------------#
+
+# INSTALACIÓN ADMINER
+# Creamos carpeta
+sudo mkdir /var/www/html/Adminer
+# Nos movemos a esta ruta
+cd /var/www/html/Adminer
+
+# Instalamos herramientas adicionales
+wget https://github.com/vrana/adminer/releases/download/v4.7.7/adminer-4.7.7-mysql.php
+
+# Renombrar el archivo Adminer
+mv adminer-4.7.7-mysql.php index.php
+
 # INSTALACIÓN DE PHPMYADMIN
+apt install unzip -y
 
-# Configuramos la contraseña para phpMyAdmin en MySQL
-PHPMYADMIN_PASSWD=phpmyadmin
+#Descargamos el código fuente de phpMyAdmin
+cd /home/Ubuntu
+rm -rf phpMyAdmin-5.0.4-all-languages.zip
+wget https://files.phpmyadmin.net/phpMyAdmin/5.0.4/phpMyAdmin-5.0.4-all-languages.zip
 
-# Configuramos las opciones de instalación de phpMyAdmin
-echo "phpmyadmin phpmyadmin/reconfigure-webserver multiselect apache2" | debconf-set-selections
-echo "phpmyadmin phpmyadmin/dbconfig-install boolean true" | debconf-set-selections
-echo "phpmyadmin phpmyadmin/mysql/app-pass password $PHPMYADMIN_PASSWD" | debconf-set-selections
-echo "phpmyadmin phpmyadmin/mysql/app-password-confirm password $PHPMYADMIN_PASSWD" | debconf-set-selections
+#Descomprimimos el archivo .zip
+unzip phpMyAdmin-5.0.4-all-languages.zip
 
-# Instalamos phpMyAdmin
-apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl -y
+#Borramos el archivo .zip
+rm -rf phpMyAdmin-5.0.4-all-languages.zip
+
+#Movemos el directorio de phpMyAdmin al directorio /var/www/html
+mv phpMyAdmin-5.0.4-all-languages/ /var/www/html/phpmyadmin
 
 # INSTALACIÓN GOACCESS
 
@@ -64,18 +80,18 @@ apt-get install goaccess -y
 
 #Creación de un direcctorio para consultar estadísticas
 # DEFINIMOS VARIABLES
-HTTPPASSWD_USER=usuario
-HTTPASSWD_PASSWD=contraseña
+HTTPPASSWD_USER=pilar
+HTTPASSWD_PASSWD=root
 HTTPPASSWD_DIR=/home/ubuntu
 
 mkdir -p /var/www/html/stats
 nohup goaccess /var/log/apache2/access.log -o /var/www/html/stats/index.html --log-format=COMBINED --real-time-html &
 htpasswd -bc $HTTPPASSWD_DIR/.htpasswd $HTTPPASSWD_USER $HTTPASSWD_PASSWD
 
-# Copiamos el archivo de configuración de Apache
+# Copiamos el archivo de configuración de Nginx
 git clone https://github.com/knyu07/iaw-practica-06
-cp /home/ubuntu/iaw-practica_06/000-default.conf /etc/apache2/sites-available/
-systemctl restart apache2
+cp /home/ubuntu/iaw-practica-03/000-default.conf /etc/nginx/sites-available/
+systemctl restart nginx
 
 # --------------------------------------------------------------------------------
 # Instalamos la aplicación web
@@ -86,12 +102,13 @@ cd /var/www/html
 rm -rf iaw-practica-lamp
 git clone https://github.com/josejuansanchez/iaw-practica-lamp
 mv /var/www/html/iaw-practica-lamp/src/* /var/www/html/
-# Importamos el script de creación de la base de datos
-mysql -u root -p$BD_ROOT_PASSWD  < /var/www/html/iaw-practica-lamp/db/database.sql
 
 # Eliminamos contenido que no sea útil
-rm -rf /var/www/html/index.html 
+rm -rf /var/www/html/index.html
 rm -rf /var/www/html/iaw-practica-lamp
 
 #Cambiamos los permisos
 chown www-data:www-data * -R
+
+#Reiniciamos
+systemctl restart nginx
