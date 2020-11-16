@@ -21,7 +21,7 @@ mysql -u root <<< "ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_pa
 mysql -u root <<< "FLUSH PRIVILEGES;"
 
 # Instalamos los módulos de PHP
-apt-get install php-fpm php-mysql
+apt-get install php-fpm php-mysql -y
 
 #Configuración de php-fpm
 nano /etc/php/7.4/fpm/php.ini
@@ -31,10 +31,10 @@ sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 systemctl restart php7.4-fpm
 
 #Configuramos NGNIX para usar php.fpm
-nano /etc/nginx/sites-available/default
-sed -i "s/index/index.php/" /etc/nginx/sites-available/default
-
-
+cd /home/ubuntu
+git clone https://github.com/knyu07/iaw-practica-06
+cp /home/ubuntu/iaw-practica-06/default /etc/nginx/sites-available/default
+systemctl restart nginx
 
 
 ########################################
