@@ -78,22 +78,6 @@ wget -O - https://deb.goaccess.io/gnugpg.key | sudo apt-key add -
 apt-get update -y
 apt-get install goaccess -y
 
-#Creación de un direcctorio para consultar estadísticas
-# DEFINIMOS VARIABLES
-HTTPPASSWD_USER=pilar
-HTTPASSWD_PASSWD=root
-HTTPPASSWD_DIR=/home/ubuntu
-
-mkdir -p /etc/nginx/.htpasswd
-nohup goaccess /var/log/nginx/access.log -o --log-format=COMBINED --real-time-html &
-htpasswd -c /etc/nginx/.htpasswd/admin admin
-#htpasswd -bc $HTTPPASSWD_DIR/.htpasswd $HTTPPASSWD_USER $HTTPASSWD_PASSWD
-
-# Copiamos el archivo de configuración de Nginx
-git clone https://github.com/knyu07/iaw-practica-06
-cp /home/ubuntu/iaw-practica-06/000-default.conf /etc/nginx/sites-available/
-systemctl restart nginx
-
 # --------------------------------------------------------------------------------
 # Instalamos la aplicación web
 # --------------------------------------------------------------------------------
