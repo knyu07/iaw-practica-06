@@ -29,10 +29,15 @@ sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/7.4/fpm/php.ini
 #Reiniciamos
 systemctl restart php7.4-fpm
 
+#Renombramos y movemos
+mv /var/www/html/index.nginx-debian.html nginx.html
+mv nginx.html /var/www/html
+
 #Configuramos NGINX para usar php.fpm
 cd /home/ubuntu
 git clone https://github.com/knyu07/iaw-practica-06
 cp /home/ubuntu/iaw-practica-06/default /etc/nginx/sites-available/default
+cp /home/ubuntu/iaw-practica-06/info.php /var/www/html
 systemctl restart nginx
 
 
@@ -77,6 +82,10 @@ echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee -a /etc/ap
 wget -O - https://deb.goaccess.io/gnugpg.key | sudo apt-key add -
 apt-get update -y
 apt-get install goaccess -y
+
+#Configuramos el archivo index.php
+cd /home/ubuntu
+cp /home/ubuntu/iaw-practica-06/index.php /var/www/html
 
 # --------------------------------------------------------------------------------
 # Instalamos la aplicación web
