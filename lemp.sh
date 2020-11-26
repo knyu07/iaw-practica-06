@@ -77,12 +77,6 @@ rm -rf phpMyAdmin-5.0.4-all-languages.zip
 #Movemos el directorio de phpMyAdmin al directorio /var/www/html
 mv phpMyAdmin-5.0.4-all-languages/ /var/www/html/phpmyadmin
 
-# INSTALACIÓN GOACCESS
-
-echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/goaccess.list
-wget -O - https://deb.goaccess.io/gnugpg.key | sudo apt-key add -
-apt-get update -y
-apt-get install goaccess -y
 
 # --------------------------------------------------------------------------------
 # Instalamos la aplicación web
