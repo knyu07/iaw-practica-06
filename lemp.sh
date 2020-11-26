@@ -84,10 +84,6 @@ wget -O - https://deb.goaccess.io/gnugpg.key | sudo apt-key add -
 apt-get update -y
 apt-get install goaccess -y
 
-#Configuramos el archivo index.php
-cd /home/ubuntu
-cp /home/ubuntu/iaw-practica-06/index.php /var/www/html
-
 # --------------------------------------------------------------------------------
 # Instalamos la aplicación web
 # --------------------------------------------------------------------------------
