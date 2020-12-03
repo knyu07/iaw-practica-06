@@ -35,10 +35,8 @@ mv nginx.html /var/www/html
 
 #Configuramos NGINX para usar php.fpm
 cd /home/ubuntu
-git clone https://github.com/knyu07/iaw-practica-06
 cp /home/ubuntu/iaw-practica-06/default /etc/nginx/sites-available/default
 cp /home/ubuntu/iaw-practica-06/info.php /var/www/html
-rm -r /home/ubuntu/iaw-practica-06
 systemctl restart nginx
 
 
