@@ -83,6 +83,9 @@ rm -rf iaw-practica-lamp
 git clone https://github.com/josejuansanchez/iaw-practica-lamp
 mv /var/www/html/iaw-practica-lamp/src/* /var/www/html/
 
+# Importamos el script de creación de la base de datos
+mysql -u root -p$BD_ROOT_PASSWD  < /var/www/html/iaw-practica-lamp/db/database.sql
+
 # Eliminamos contenido que no sea útil
 rm -rf /var/www/html/index.html
 rm -rf /var/www/html/iaw-practica-lamp
