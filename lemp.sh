@@ -2,10 +2,7 @@
 set -x
 
 # Actualizamos la lista de paquetes
-apt update
-
-#Actualizamos los paquete
-apt upgrade -y 
+apt update 
 
 #Instalación NGINX
 sudo apt-get install nginx -y
